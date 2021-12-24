@@ -2,29 +2,57 @@
 
 Map::Map()
 {
+	std::string filePath;
+	std::cout << "Ruta del mapa:" << std::endl;
+	std::cin >> filePath;
+	std::ifstream file(filePath);
+	std::string line;
+	std::vector<std::string> lines;
+	while (std::getline(file, line))
+	{
+		lines.push_back(line);
+	}
+	file.close();
+	Width = 0;
+	Height = 0;
+	Size = 0;
+	std::vector<std::string> Map_Load;
+	for (size_t i = 0; i < lines.size(); i++)
+	{
+		if (i == 0)
+		{
+			std::string WidthTemp;
+			std::string HeightTemp;
+			int commaCount = 0;
+			for (size_t j = 0; j < lines[i].size(); j++)
+			{
+				if (lines[i][j] == ',')
+				{
+					commaCount++;
+				}
+				else
+				{
+					if (commaCount == 0)
+					{
+						WidthTemp += lines[i][j];
+					}
+					else
+					{
+						HeightTemp += lines[i][j];
+					}
+				}
+			}
+			Width = std::stoi(WidthTemp);
+			Height = std::stoi(HeightTemp);
+			Size = Width * Height;
+		}
+		else
+		{
+			Map_Load.push_back(lines[i]);
+		}
+	}
 	storedmap = new MAP_TILES[Size];
 	points = 0;
-	const char* Map_Load[] = {
-		{"##  ####################################  ##"},
-		{"#..........................................#"},
-		{" .##################    ##################. "},
-		{" .#......................................#. "},
-		{"#.#.################ ## ################.#.#"},
-		{"#.#.#                ##                #.#.#"},
-		{"#.#.  # ############################ #  .#.#"},
-		{"#.#.# # #            ##              # #.#.#"},
-		{"#. .# # # ########## ## ############ # #. .#"},
-		{"#. .# #     E        ##        P     # #. .#"},
-		{"#. .# # # ########## ## ############ # #. .#"},
-		{"#.#.# # #            ##              # #.#.#"},
-		{"#.#.  # ############################ #  .#.#"},
-		{"#.#.#                ##                #.#.#"},
-		{"#.#.################ ## ################.#.#"},
-		{" .#......................................#. "},
-		{" .##################    ##################. "},
-		{"#..........................................#"},
-		{"##  ####################################  ##"}
-	};
 	int x = 0;
 	int y = 0;
 	char tile = ' ';
@@ -60,6 +88,8 @@ Map::Map()
 	backgrounds[MAP_TILES::MAP_EMPTY] = ConsoleUtils::CONSOLE_COLOR::BLACK;
 	backgrounds[MAP_TILES::MAP_WALL] = ConsoleUtils::CONSOLE_COLOR::DARK_BLUE;
 	backgrounds[MAP_TILES::MAP_POINT] = ConsoleUtils::CONSOLE_COLOR::BLACK;
+	foregrounds[MAP_TILES::MAP_POWERUP] = ConsoleUtils::CONSOLE_COLOR::WHITE;
+	backgrounds[MAP_TILES::MAP_POWERUP] = ConsoleUtils::CONSOLE_COLOR::BLACK;
 }
 
 Map::~Map()
