@@ -1,7 +1,7 @@
 #include "Map.h"
 
 /// <summary>
-/// Sets the needed variables
+/// Sets the needed varia
 /// </summary>
 void Setup();
 /// <summary>
